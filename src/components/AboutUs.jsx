@@ -10,7 +10,7 @@ const AboutUs = () => {
 
   return (
     <>
-      <div className="absolute top-0 z-[-2] h-[100vh] w-screen bg-neutral-950 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>
+      <div className="absolute top-0 z-[-2] h-[1000px] w-screen bg-neutral-950 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>
       <section className="bg-[#111827] text-black py-20 md:py-32 mb-16">
         <div className="container mx-auto px-6 lg:px-20 text-center">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-8">

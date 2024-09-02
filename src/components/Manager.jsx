@@ -222,7 +222,7 @@ const Manager = () => {
             </div>
             <div className="passwordscontainer w-[100%] bg-[#00000074] lp:mt-[2%] lp:mb-[1%] pb-[3%] bg-black">
                 <div className='yourpasswords inline-flex'>
-                    <h2 className='relative flex justify-start items-start  w-[100%] bg-slate-900 text-[#000] font-extrabold text-2xl lp:text-3xl  p-[5px]'>Your Passwords </h2>
+                    <h2 className='relative flex justify-start items-start  w-[100%] bg-slate-900 text-[#000] font-extrabold text-2xl lp:text-3xl ml-[30px] p-[5px]'>Your Passwords </h2>
 
                     <span class="material-symbols-outlined bg-[#00ff00] pt-3 p-2">
                         arrow_downward

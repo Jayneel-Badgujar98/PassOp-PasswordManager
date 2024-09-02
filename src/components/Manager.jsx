@@ -43,7 +43,7 @@ const Manager = () => {
     const copyText = (text) => {
         navigator.clipboard.writeText(text)
             .then(() => {
-                toast.success('Copiedd !!!', {
+                toast.success('Copied !!!', {
                     position: "top-right",
                     autoClose: 2500,
                     hideProgressBar: true,

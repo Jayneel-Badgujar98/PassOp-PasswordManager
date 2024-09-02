@@ -1,320 +1,187 @@
-// src/components/Manager.jsx
+// src\components\Navbar.jsx
+import React, { useState, useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
-import React, { useState, useEffect } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { v4 as uuidv4 } from 'uuid';
+const Navbar = () => {
+  const [activeLink, setActiveLink] = useState('/');
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
+  const rightSideRef = useRef(null);
 
-const Manager = () => {
-    const [form, setForm] = useState(() => {
-        const savedForm = localStorage.getItem('form');
-        return savedForm ? JSON.parse(savedForm) : { site: "", username: "", password: "" };
-    });
+  const handleLinkClick = (path) => {
+    setActiveLink(path);
+  };
 
-    const [passwordArray, setPasswordArray] = useState(() => {
-        const savedPasswords = localStorage.getItem('passwords');
-        return savedPasswords ? JSON.parse(savedPasswords) : [];
-    });
-
-    const [passwordVisibility, setPasswordVisibility] = useState('visibility');
-    const [errors, setErrors] = useState({ site: "", username: "", password: "" });
-
-    useEffect(() => {
-        localStorage.setItem('form', JSON.stringify(form));
-    }, [form]);
-
-    useEffect(() => {
-        localStorage.setItem('passwords', JSON.stringify(passwordArray));
-    }, [passwordArray]);
-
-    const showPassword = () => {
-        setPasswordVisibility(prevVisibility =>
-            prevVisibility === 'visibility' ? 'visibility_off' : 'visibility'
-        );
+  useEffect(() => {
+    // Close menu when clicking outside of the menu and right side area
+    const handleClickOutside = (event) => {
+      if (menuOpen && menuRef.current && !menuRef.current.contains(event.target) && !rightSideRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
     };
 
-    const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
-        setErrors({ ...errors, [e.target.name]: "" });
-    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [menuOpen]);
 
+  return (
+    <nav className="bg-[#7e3b3b19] flex justify-between lp:justify-between items-center px-7 py-3 sticky top-0 z-50">
+      {/* Logo Section */}
+      <div className="flex items-center gap-4 sticky z-0 top-0">
+        <img 
+          height="60px"
+          width="60px"
+          src="https://th.bing.com/th/id/OIG3.DJ0n.qROg9928iem0eYo?w=1024&amp;h=1024&amp;rs=1&amp;pid=ImgDetMain"
+          alt="logo"
+        />
+        <div className="logo font-extrabold text-2xl lp:whitespace-nowrap">
+          <span className="text-[#00ff00]">&lt;</span>
+          <span>Pass</span>
+          <span className="text-[#00ff00]"> OP</span>
+          <span className="text-[#00ff00]">/&gt;</span>
+        </div>
+      </div>
 
+      {/* Desktop Menu Links */}
+      <ul className="hidden lpnav:flex lpnav:gap-30  justify-evenly w-[75%]">
+        <li className="flex items-center gap-4">
+          <Link
+            className={`hover:font-bold flex items-center gap-4 ${activeLink === '/' ? 'border-b-4 border-black shadow-text-white' : ''}`}
+            to="/"
+            onClick={() => handleLinkClick('/')}
+          >
+            <lord-icon
+              src="https://cdn.lordicon.com/wmwqvixz.json"
+              trigger="hover"
+              style={{ width: '30px', height: '30px' }} // Adjust icon size
+            />
+            Home
+          </Link>
+        </li>
+        <li className="flex items-center gap-4 lp:whitespace-nowrap">
+          <Link
+            className={`hover:font-bold flex items-center gap-4 ${activeLink === '/about-us' ? 'border-b-4 border-black shadow-text-white' : ''}`}
+            to="/about-us"
+            onClick={() => handleLinkClick('/about-us')}
+          >
+            <lord-icon
+              src="https://cdn.lordicon.com/hrjifpbq.json"
+              trigger="hover"
+              style={{ width: '30px', height: '30px' }}
+            />
+            About Us
+          </Link>
+        </li>
+        <li className="flex items-center gap-4 lp:whitespace-nowrap">
+          <Link
+            className={`hover:font-bold flex items-center gap-4 ${activeLink === '/our-services' ? 'border-b-4 border-black shadow-text-white' : ''}`}
+            to="/our-services"
+            onClick={() => handleLinkClick('/our-services')}
+          >
+            <lord-icon
+              src="https://cdn.lordicon.com/depeqmsz.json"
+              trigger="hover"
+              style={{ width: '30px', height: '30px' }}
+            />
+            Our Services
+          </Link>
+        </li>
+        <li className="flex items-center gap-4 lp:whitespace-nowrap">
+          <Link
+            className={`hover:font-bold flex items-center gap-4 ${activeLink === '/contact-us' ? 'border-b-4 border-black shadow-text-white' : ''}`}
+            to="/contact-us"
+            onClick={() => handleLinkClick('/contact-us')}
+          >
+            <lord-icon
+              src="https://cdn.lordicon.com/srsgifqc.json"
+              trigger="hover"
+              style={{ width: '30px', height: '30px' }}
+            />
+            Contact Us
+          </Link>
+        </li>
+      </ul>
 
-    const copyText = (text) => {
-        navigator.clipboard.writeText(text)
-            .then(() => {
-                toast.success('Copied !!!', {
-                    position: "top-right",
-                    autoClose: 2500,
-                    hideProgressBar: true,
-                    // if you want  the time progress bar to not show write this  hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "dark",
-                });
-            })
-            .catch(err => {
-                console.error('Failed to copy text: ', err);
-            });
-    };
+      {/* GitHub Logo */}
+      {/* <div className="hidden lp:flex items-center">
+        <img className="invert"
+          width="40px"
+          height="40px"
+          src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png"
+          alt="GitHub Logo"
+        />
+      </div> */}
 
-    const deletePassword = (id) => {
-        console.log("Deleting password with id: ", id);
-        let confirmation = confirm(`Are you sure you want to delete this password?, This password will be deleted Permanently!`);
-        if (confirmation) {
-            const updatedPasswordArray = passwordArray.filter((item) => item.id !== id);
-            setPasswordArray(updatedPasswordArray);
-            toast.success('Password deleted successfully !!!', {
-                position: "top-right",
-                autoClose: 2500,
-                hideProgressBar: true,
-                // if you want  the time progress bar to not show write this  hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-            });
-        }
-    };
+      {/* Mobile Menu Button */}
+      <div className="lp:hidden flex">
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="relative z-20 p-3"
+        >
+          <span className={`material-symbols-outlined transition-transform duration-300 text-3xl ${menuOpen ? 'hidden' : 'block'}`}>
+            menu
+          </span>
+        </button>
 
-    const editPassword = (id) => {
-        console.log("Editing password with id: ", id);
-        const passwordToEdit = passwordArray.find(item => item.id === id);
-        setForm(passwordToEdit);
+        {/* Right Side Area for Closing Menu */}
+        <div
+          ref={rightSideRef}
+          className="fixed top-0 right-0 w-[30%] h-full invisible "
+          onClick={() => setMenuOpen(false)}
+        />
 
-        // Do not remove the password from the list until editing is confirmed
-        setPasswordArray(passwordArray.filter(item => item.id !== id));
-        toast.success('Password edited successfully !!!', {
-            position: "top-right",
-            autoClose: 2500,
-            hideProgressBar: true,
-            // if you want  the time progress bar to not show write this  hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-        });
-    };
-    const savePassword = () => {
-        let newErrors = {};
-        if (!form.site) newErrors.site = "Website name cannot be empty";
-        if (!form.username) newErrors.username = "Username cannot be empty";
-        if (!form.password) newErrors.password = "Password cannot be empty";
+        {/* Mobile Menu Overlay */}
+        <div
+          ref={menuRef}
+          className={`fixed top-0 left-0 w-[70%] h-full bg-gradient-to-r from-slate-800 to-blue-800 transition-transform duration-500 ease-in-out ${menuOpen ? 'translate-x-0' : '-translate-x-full'} z-10`}
+        >
+          {/* Close Icon */}
+          <button
+            onClick={() => setMenuOpen(false)}
+            className="absolute top-4 right-4 text-black text-3xl p-2"
+          >
+            <span className="material-symbols-outlined">close</span>
+          </button>
 
-        if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
-            return;
-        }
+          {/* Logo and Name */}
+          <div className="flex items-center p-5 text-white">
+            <img src="https://th.bing.com/th/id/OIG3.DJ0n.qROg9928iem0eYo?w=1024&amp;h=1024&amp;rs=1&amp;pid=ImgDetMain" alt="Website Logo" className="h-10 w-10 mr-3" />
+            <h1 className="text-2xl font-bold text-black">
+              <span className="text-[#00ff00]">&lt;</span>
+              <span>Pass</span>
+              <span className="text-[#00ff00]"> OP</span>
+              <span className="text-[#00ff00]">/&gt;</span>
+            </h1>
+          </div>
 
-        const updatedPasswordArray = [...passwordArray, { ...form, id: uuidv4() }];
-        localStorage.setItem('passwords', JSON.stringify([...passwordArray, { ...form, id: uuidv4() }]));
-        setPasswordArray(updatedPasswordArray);
+          {/* Mobile Navigation Links */}
+          <div className="flex flex-col p-10 space-y-7 text-white">
+            <Link className={`flex items-center gap-4 hover:bg-blue-600 hover:shadow-md rounded-lg py-3 px-5 transition duration-300 text-lg font-semibold ${activeLink === '/' ? 'border-b-4 border-white' : ''}`} to="/" onClick={() => handleLinkClick('/')}>
+              <lord-icon src="https://cdn.lordicon.com/wmwqvixz.json" trigger="hover" style={{ width: '30px', height: '30px' }} />
+              Home
+            </Link>
+            <Link className={`flex items-center gap-4 hover:bg-blue-600 hover:shadow-md rounded-lg py-3 px-5 transition duration-300 text-lg font-semibold ${activeLink === '/about-us' ? 'border-b-4 border-white' : ''}`} to="/about-us" onClick={() => handleLinkClick('/about-us')}>
+              <lord-icon src="https://cdn.lordicon.com/hrjifpbq.json" trigger="hover" style={{ width: '30px', height: '30px' }} />
+              About Us
+            </Link>
+            <Link className={`flex items-center gap-4 hover:bg-blue-600 hover:shadow-md rounded-lg py-3 px-5 transition duration-300 text-lg font-semibold ${activeLink === '/our-services' ? 'border-b-4 border-white' : ''}`} to="/our-services" onClick={() => handleLinkClick('/our-services')}>
+              <lord-icon src="https://cdn.lordicon.com/depeqmsz.json" trigger="hover" style={{ width: '30px', height: '30px' }} />
+              Our Services
+            </Link>
+            <Link className={`flex items-center gap-4 hover:bg-blue-600 hover:shadow-md rounded-lg py-3 px-5 transition duration-300 text-lg font-semibold ${activeLink === '/contact-us' ? 'border-b-4 border-white' : ''}`} to="/contact-us" onClick={() => handleLinkClick('/contact-us')}>
+              <lord-icon src="https://cdn.lordicon.com/srsgifqc.json" trigger="hover" style={{ width: '30px', height: '30px' }} />
+              Contact Us
+            </Link>
 
-        toast.success('Password saved successfully!', {
-            position: "top-right",
-            autoClose: 2500,
-            hideProgressBar: true,
-            // write   hideProgressBar: false, to show progressbar also
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-        });
-
-        setForm({ site: "", username: "", password: "" });
-    };
-
-    return (
-        <>
-
-            <ToastContainer />
-            <div className="absolute top-0 z-[-2] h-[100vh] w-screen bg-neutral-950 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]">
-
-            </div>
-            <div className=" mx-auto lp:bg-slate-800 p-4 mt-5 lp:px-40 lp:py-16  lp:w-[70%] font-semibold lp:mt-[1%] lp:mb-[1%] md:flex lp:justify-center lp:items-center">
-                <h1 className='text-4xl text-center'>
-                    <span className='text-[#00ff00]'>&lt;</span>
-                    <span>Pass</span>
-                    <span className='text-[#00ff00]'> OP</span>
-                    <span className='text-[#00ff00]'>/&gt;</span>
-                </h1>
-                <p className='text-[#3ac43a] text-center text-1xl mb-5'>Your Own Password Manager</p>
-                <div className=' text-white flex flex-col md:flex-row p-4 gap-4  w-full md:w-[50%]'>
-                    <input
-                        value={form.site}
-                        onChange={handleChange}
-                        placeholder='Enter Website Name'
-                        className="rounded-full md:w-full w-[90%] mx-auto border-2 px-5 py-2 mt-2 border-[#00ff00] outline-[#000] flex justify-start items-center lp:py-1 lp:px-5 lp:mt-6 text-black"
-                        type="text"
-                        name="site"
-                    />
-
-                    {errors.site && <p className="text-red-500 text-sm mt-1">{errors.site}</p>}
-
-                    <div className='flex lp:flex-row flex-col justify-evenly gap-4 lp:gap-16 mb-6'>
-                        <div className='w-[100%] lp:w-[60%]'>
-                            <input
-                                value={form.username}
-                                onChange={handleChange}
-                                placeholder='Enter Username'
-                                className="rounded-full  w-[90%] mx-auto border-2 px-5 py-2 mt-2 border-[#00ff00] outline-[#000] flex justify-start items-center lp:py-1 lp:px-5 lp:mt-2 lp:mx-auto  text-black"
-                                type="text"
-                                name='username'
-                                id='username'
-                            />
-                            {errors.username && <p className="text-red-500 text-sm mt-1">{errors.username}</p>}
-                        </div>
-
-                        <div className='relative '>
-                            <input
-                                value={form.password}
-                                onChange={handleChange}
-                                placeholder='Enter Password'
-                                className="rounded-full relative lp:relative w-[90%] mx-auto border-2 px-5 py-2 mt-2 border-[#00ff00] outline-[#000] flex justify-start items-center lp:py-1 lp:px-5 lp:mt-2 lp:mx-auto  text-black"
-                                type={passwordVisibility === 'visibility' ? 'password' : 'text'}
-                                name='password'
-                                id='password'
-                            />
-
-                            <span className='absolute lp:absolute top-2.5 right-3 lp:top-2.5 lp:right-0 lp:py-1 lp:px-6 text-[#000] items-center py-2 px-9'>
-                                <span className="material-symbols-outlined cursor-pointer" onClick={showPassword}>
-                                    {passwordVisibility}
-                                </span>
-                            </span>
-
-                            {/* <input
-                                value={form.password}
-                                onChange={handleChange}
-                                placeholder='Enter Password'
-                                className="rounded-full border-2 text-black border-[#00ff00] outline-[#000] py-1 px-5 w-full"
-                                type={passwordVisibility === 'visibility' ? 'text' : 'password'}
-                                name='password'
-                                id='password'
-                            />
-                            <span className='absolute right-0 top-1/2 transform -translate-y-1/2 text-[#000] flex items-center pr-3'>
-                                <span className="material-symbols-outlined cursor-pointer" onClick={showPassword}>
-                                    {passwordVisibility}
-                                </span>
-                            </span> */}
-
-                            {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
-                        </div>
-                    </div>
-
-                    <button onClick={savePassword} className='flex justify-center gap-2 font-bold mx-auto text-1.5xl border-2 border-black text-[#000000] bg-[#0bff0b] rounded-full items-center w-fit py-2 px-3 hover:bg-[#00bd00]'>
-                        <lord-icon
-                            src="https://cdn.lordicon.com/jgnvfzqg.json"
-                            trigger="hover"
-                        >
-                        </lord-icon>
-                        Save Password
-                    </button>
-                </div>
-            </div>
-            <div className="passwordscontainer  w-screen bg-[#00000074] lp:mt-[2%] lp:mb-[1%] pb-[3%] bg-black">
-                <div className='yourpasswords inline-flex'>
-                    <h2 className='relative flex justify-start items-start bg-slate-900 text-[#000] font-extrabold text-2xl lp:text-3xl pl-[100px] p-[5px]'>Your Passwords</h2>
-                    <span className='relative flex justify-start items-center bg-slate-900 text-[white] font-extrabold text-2xl lp:text-3xl pl-[70px] p-[5px]'>
-                        <lord-icon className="invert absolute cursor-pointer bg-slate-900 text-[white]"
-                            src="https://cdn.lordicon.com/whtfgdfm.json"
-                            trigger="hover"
-                        >
-                        </lord-icon>
-                    </span>
-                </div>
-                <div className="passwordstable lp:w-[80%] w-[100%] lp:mx-auto mx-auto pt-[2%] ">
-                    {passwordArray.length === 0 && (
-                        <div className="text-white pb-[3%]">No Passwords To show</div>
-                    )}
-                    {passwordArray.length !== 0 && (
-                        <table className="table-auto w-full overflow-hidden ">
-                            <thead className="bg-[#00ff00b9] text-white font-bold lp:text-[18px] text-[14px]">
-                                <tr>
-                                    <th className="rounded-tl-lg lp:py-3 py-2.5 border-r-2 border-b-2 border-[black]">Site</th>
-                                    <th className="lp:py-3 py-2.5 border-r-2 border-b-2 border-[black]">Username</th>
-                                    <th className="lp:py-3 py-2.5 pr-4 border-r-2 border-b-2 border-[black]">Password</th>
-                                    <th className="rounded-tr-lg lp:py-3 py-2.5 border-b-2 border-[black]">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody className="bg-green-300 text-black">
-                                {passwordArray.map((item, index) => (
-                                    <tr key={index} className="border-b-2 border-black">
-                                        <td className="py-4 text-sm lp:text-lg text-center relative border-r-2 border-black border-b-3 rounded-bl-md">
-                                            <a href={item.site} target="_blank" rel="noopener noreferrer">{item.site}</a>
-                                            <div className="flex justify-center tb:absolute mt-2 cursor-pointer tb:top-2 top-7 lp:top-3 tb:right-3" onClick={() => copyText(item.password)}>
-                                                <div className="relative inline-block">
-                                                    <div className="absolute bottom-[-10px] left-1/2 transform -translate-x-1/2 text-sm opacity-100 transition-opacity duration-300 hover:opacity-100">Copy</div>
-                                                    <lord-icon
-                                                        style={{ width: "25px", height: "25px" }}
-                                                        src="https://cdn.lordicon.com/iykgtsbt.json"
-                                                        trigger="hover"
-                                                    ></lord-icon>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="py-4 text-sm lp:text-lg text-center relative border-r-2 border-black border-b-3">
-                                            {item.username}
-                                            <div className="flex justify-center tb:absolute mt-2 cursor-pointer tb:top-2 top-7 lp:top-3 tb:right-3" onClick={() => copyText(item.username)}>
-                                                <div className="relative inline-block">
-                                                    <div className="absolute bottom-[-10px] left-1/2 transform -translate-x-1/2 text-sm opacity-100 transition-opacity duration-300 hover:opacity-100">Copy</div>
-                                                    <lord-icon
-                                                        style={{ width: "25px", height: "25px" }}
-                                                        src="https://cdn.lordicon.com/iykgtsbt.json"
-                                                        trigger="hover"
-                                                    ></lord-icon>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="py-4 text-sm lp:text-lg text-center relative border-r-2 border-black border-b-3">
-                                            {item.password}
-                                            <div className="flex justify-center tb:absolute mt-2 cursor-pointer tb:top-2 top-7 lp:top-3 tb:right-3" onClick={() => copyText(item.password)}>
-                                                <div className="relative inline-block">
-                                                    <div className="absolute bottom-[-10px] left-1/2 transform -translate-x-1/2 text-sm opacity-100 transition-opacity duration-300 hover:opacity-100">Copy</div>
-                                                    <lord-icon
-                                                        style={{ width: "25px", height: "25px" }}
-                                                        src="https://cdn.lordicon.com/iykgtsbt.json"
-                                                        trigger="hover"
-                                                    ></lord-icon>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="py-3 lp:py-4 text-sm lp:text-lg text-center relative flex flex-col gap-3 tb:flex-row justify-center border-r-2 border-black border-b-3 rounded-br-md">
-                                            <span className="relative mx-auto" onClick={() => { editPassword(item.id) }}>
-                                                <lord-icon
-                                                    src="https://cdn.lordicon.com/gwlusjdu.json"
-                                                    trigger="hover"
-                                                ></lord-icon>
-                                                <div className="absolute bottom-[-10px] left-1/2 transform -translate-x-1/2 text-sm opacity-100 transition-opacity duration-300 hover:opacity-100">Edit</div>
-                                            </span>
-                                            <span className="lp:ml-11 relative mx-auto" onClick={() => deletePassword(item.id)}>
-                                                <lord-icon
-                                                    src="https://cdn.lordicon.com/skkahier.json"
-                                                    trigger="hover"
-                                                ></lord-icon>
-                                                <div className="absolute bottom-[-10px] left-1/2 transform -translate-x-1/2 text-sm opacity-100 transition-opacity duration-300 hover:opacity-100">Delete</div>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    )}
-                </div>
-
-            </div>
-        </>
-    );
+            <div className='absolute bottom-20 text-bold text-md text-[#000] '>Created & Designed With ❤ <span className="font-extrabold text-[#31f031]">&lt;PassOP /&gt;</span> <i className='text-md'>by Jayneel Badgujar</i></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
 };
 
-export default Manager;
-
-
-
+export default Navbar;
 
 
 

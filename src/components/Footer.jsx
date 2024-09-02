@@ -71,7 +71,7 @@ const Footer = () => {
         {/* Footer Bottom Text */}
         <div className="mt-8 text-center text-gray-500">
           <p>&copy; 2024 Pass OP. All rights reserved.</p>
-          <p>Created & Designed with ❤️ by <i>Jay Badgujar</i></p>
+          <p>Created & Designed with ❤️ by <i>Jayneel Badgujar</i></p>
         </div>
       </footer>
 

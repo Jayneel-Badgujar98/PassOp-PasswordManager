@@ -25,7 +25,7 @@ const Navbar = () => {
   }, [menuOpen]);
 
   return (
-    <nav className="bg-[#7e3b3b19] flex justify-around lp:justify-evenly items-center px-7 py-3 sticky top-0 z-50">
+    <nav className="bg-[#7e3b3b19] flex justify-between lp:justify-between items-center px-7 py-3 sticky top-0 z-50">
       {/* Logo Section */}
       <div className="flex items-center gap-4 sticky z-0 top-0">
         <img 
@@ -43,7 +43,7 @@ const Navbar = () => {
       </div>
 
       {/* Desktop Menu Links */}
-      <ul className="hidden lpnav:flex lpnav:gap-40 lpnav:ml-80">
+      <ul className="hidden lpnav:flex lpnav:gap-30  justify-evenly w-[75%]">
         <li className="flex items-center gap-4">
           <Link
             className={`hover:font-bold flex items-center gap-4 ${activeLink === '/' ? 'border-b-4 border-black shadow-text-white' : ''}`}
@@ -173,7 +173,7 @@ const Navbar = () => {
               Contact Us
             </Link>
 
-            <div className='absolute bottom-20 text-bold text-md text-[#000] '>Created & Designed With ❤ <span className="font-extrabold text-[#31f031]">&lt;PassOP /&gt;</span> <i className='text-md'>by Jay Badgujar</i></div>
+            <div className='absolute bottom-20 text-bold text-md text-[#000] '>Created & Designed With ❤ <span className="font-extrabold text-[#31f031]">&lt;PassOP /&gt;</span> <i className='text-md'>by Jayneel Badgujar</i></div>
           </div>
         </div>
       </div>
@@ -182,3 +182,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+

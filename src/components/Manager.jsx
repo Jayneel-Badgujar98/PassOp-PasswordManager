@@ -193,6 +193,6 @@ export default Navbar;
 
 
 
-// Till 1:46:00 of CWH React Project Password Manager
+
 // write localstorage.clear() in console to clear local storage means to clearing all the data of passwords,username,website name and other all permanently
 // write in vs code terminal : npm run dev

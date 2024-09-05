@@ -31,3 +31,4 @@ function App() {
 }
 
 export default App;
+// // write in vs code terminal to start the app :- npm run dev

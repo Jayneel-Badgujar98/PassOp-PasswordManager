@@ -11,3 +11,4 @@ createRoot(document.getElementById('root')).render(
     </Router>
   </StrictMode>,
 );
+// write in vs code terminal to start the app :- npm run dev
